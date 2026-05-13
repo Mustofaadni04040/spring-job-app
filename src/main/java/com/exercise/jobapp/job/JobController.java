@@ -1,6 +1,5 @@
 package com.exercise.jobapp.job;
 
-import com.exercise.jobapp.job.impl.JobServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ public class JobController {
         this.jobService = jobService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<Job>> findAll() {
         List<Job> jobs = jobService.findAll();
 
@@ -28,7 +27,7 @@ public class JobController {
         return ResponseEntity.ok(jobs);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<String> createJob(@RequestBody Job job) {
         jobService.createJob(job);
         return new ResponseEntity<>("Job created successfully", HttpStatus.OK);
@@ -53,5 +52,16 @@ public class JobController {
         }
 
         return new  ResponseEntity<>("No jobs found", HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("{/id}")
+    public ResponseEntity<String> updateJob(@PathVariable Long id, @RequestBody Job jobToUpdate) {
+        boolean updated = jobService.updateJob(id, jobToUpdate);
+
+        if (updated) {
+            return new ResponseEntity<>("Job updated successfully", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("No jobs found", HttpStatus.NOT_FOUND);
     }
 }
