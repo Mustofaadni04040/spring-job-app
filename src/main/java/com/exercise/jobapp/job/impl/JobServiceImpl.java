@@ -30,4 +30,9 @@ public class JobServiceImpl implements JobService {
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public boolean deleteJobById(Long id) {
+        return jobs.remove(getJobById(id));
+    }
 }

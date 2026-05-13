@@ -22,7 +22,7 @@ public class JobController {
         List<Job> jobs = jobService.findAll();
 
         if (jobs.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return ResponseEntity.ok(jobs);
@@ -42,5 +42,16 @@ public class JobController {
             return ResponseEntity.ok(job);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteJobById(@PathVariable Long id) {
+        boolean deleted = jobService.deleteJobById(id);
+
+        if (deleted) {
+            return new ResponseEntity<>("Job deleted successfully", HttpStatus.OK);
+        }
+
+        return new  ResponseEntity<>("No jobs found", HttpStatus.NOT_FOUND);
     }
 }
