@@ -1,5 +1,7 @@
 package com.exercise.jobapp.job;
 
+import com.exercise.jobapp.company.Company;
+import com.exercise.jobapp.company.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +12,11 @@ import java.util.List;
 @RequestMapping("/jobs")
 public class JobController {
     private final JobService jobService;
+    private final CompanyService companyService;
 
-    public JobController(JobService jobService) {
+    public JobController(JobService jobService, CompanyService companyService) {
         this.jobService = jobService;
+        this.companyService = companyService;
     }
 
     @GetMapping
@@ -28,6 +32,11 @@ public class JobController {
 
     @PostMapping
     public ResponseEntity<String> createJob(@RequestBody Job job) {
+        List<Company> companies = companyService.getAllCompanies();
+
+        if (companies.isEmpty()) {
+            return new ResponseEntity<>("No companies found. Please create a company before creating a job.", HttpStatus.BAD_REQUEST);
+        }
         jobService.createJob(job);
         return new ResponseEntity<>("Job created successfully", HttpStatus.OK);
     }
