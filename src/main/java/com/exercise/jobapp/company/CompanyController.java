@@ -1,10 +1,7 @@
 package com.exercise.jobapp.company;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,12 +20,18 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateCompany(Company company, Long id) {
+    public ResponseEntity<String> updateCompany(@RequestBody Company company, @PathVariable Long id) {
         boolean updated = companyService.updateCompany(company, id);
 
         if (updated) {
             return ResponseEntity.ok("Company updated successfully");
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<String> createCompany(@RequestBody Company company) {
+        companyService.createCompany(company);
+        return ResponseEntity.ok("Company created successfully");
     }
 }
