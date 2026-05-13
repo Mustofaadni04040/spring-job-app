@@ -4,10 +4,7 @@ import com.exercise.jobapp.company.Company;
 import com.exercise.jobapp.company.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +27,16 @@ public class ReviewController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(reviewService.getAllReviews(companyId), HttpStatus.OK);
+    }
+
+    @PostMapping("/reviews")
+    public ResponseEntity<String> addReview(@PathVariable Long companyId, @RequestBody Review review){
+        boolean isReviewed = reviewService.addReview(companyId, review);
+
+        if (isReviewed){
+            return new ResponseEntity<>("Review added successfully", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("Failed to add review", HttpStatus.BAD_REQUEST);
     }
 }
