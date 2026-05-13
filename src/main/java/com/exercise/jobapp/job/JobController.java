@@ -1,15 +1,15 @@
 package com.exercise.jobapp.job;
 
 import com.exercise.jobapp.job.impl.JobServiceImpl;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/jobs")
 public class JobController {
     private final JobService jobService;
 
@@ -17,14 +17,30 @@ public class JobController {
         this.jobService = jobService;
     }
 
-    @GetMapping("/jobs")
-    public List<Job> findAll() {
-        return jobService.findAll();
+    @GetMapping()
+    public ResponseEntity<List<Job>> findAll() {
+        List<Job> jobs = jobService.findAll();
+
+        if (jobs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return ResponseEntity.ok(jobs);
     }
 
-    @PostMapping("/jobs")
-    public String createJob(@RequestBody Job job) {
+    @PostMapping()
+    public ResponseEntity<String> createJob(@RequestBody Job job) {
         jobService.createJob(job);
-        return "Job created successfully";
+        return new ResponseEntity<>("Job created successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Job> getJobById(@PathVariable Long id) {
+        Job job = jobService.getJobById(id);
+
+        if (job != null) {
+            return ResponseEntity.ok(job);
+        }
+        return ResponseEntity.notFound().build();
     }
 }
