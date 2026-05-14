@@ -60,4 +60,14 @@ public class ReviewController {
         }
         return new ResponseEntity<>("Failed to update review", HttpStatus.BAD_REQUEST);
     }
+
+    @DeleteMapping("/reviews/{reviewId}")
+    public ResponseEntity<String> deleteReview(@PathVariable Long companyId, @PathVariable Long reviewId){
+        boolean isReviewedDeleted = reviewService.deleteReview(companyId, reviewId);
+
+        if (isReviewedDeleted){
+            return new ResponseEntity<>("Review deleted successfully", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Failed to delete review", HttpStatus.BAD_REQUEST);
+    }
 }
