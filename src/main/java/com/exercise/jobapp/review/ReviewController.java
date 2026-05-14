@@ -49,4 +49,15 @@ public class ReviewController {
         }
         return ResponseEntity.ok(review);
     }
+
+    @PutMapping("/reviews/{reviewId}")
+    public ResponseEntity<String> updateReview(@PathVariable Long companyId, @PathVariable Long reviewId, @RequestBody Review review){
+        boolean isReviewedUpdated = reviewService.updateReview(companyId, reviewId, review);
+
+        if (isReviewedUpdated){
+        return new ResponseEntity<>("Review updated successfully", HttpStatus.OK);
+
+        }
+        return new ResponseEntity<>("Failed to update review", HttpStatus.BAD_REQUEST);
+    }
 }
