@@ -39,4 +39,14 @@ public class ReviewController {
 
         return new ResponseEntity<>("Failed to add review", HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/reviews/{reviewId}")
+    public ResponseEntity<Review> getReview(@PathVariable Long companyId, @PathVariable Long reviewId){
+        Review review = reviewService.getReview(companyId, reviewId);
+
+        if (review == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(review);
+    }
 }
